@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="bootstrap/js/bootstrap.min.js" rel="stylesheet">
+    <script src="jquery-3.2.1.js"></script>
 
     <style>
         /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
@@ -90,10 +91,35 @@
             </div>
 
         </div>
+        <button id="invisible" style="display:none;" href="" download></button>
 
     </div>
 
+    <script>
+        $(document).ready (function(){
+            setInterval("checkFile()", 10000);
+        });
 
+        function checkFile(){
+        $.post("getfile.php").done(function(data){
+            if (data != null){
+                downloadLink = "/var/www/html/uploads/" + data;
+            
+                $("#invisible").attr("href", downloadLink);
+                $("#invisible").css("display", block);
+            }
+            
+
+        });
+        }
+    
+    </script>
+
+    <script>
+        function download() {
+        var iframe = document.getElementById('invisible');
+        iframe.src = "file.doc";
+    }</script>
     <script src="timer.js "></script>
 </body>
 
