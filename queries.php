@@ -65,7 +65,7 @@
         mysqli_stmt_close($stmt);
     }
 
-	echo getTime(3, $host, $user, $pass);
+	echo setActive(3, false, $host, $user, $pass);
 
     function getTime($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
@@ -153,7 +153,7 @@
 
     function setActive($id, $active, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
-        if($stmt = mysqli_prepare($link, "UPDATE studentTimes SET isActve  = ? WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
+        if($stmt = mysqli_prepare($link, "UPDATE studentTimes SET isActive  = ? WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
             mysqli_stmt_bind_param($stmt, "ii",$active, $id) or die ("bind param" . mysqli_stmt_error($stmt));
             mysqli_stmt_execute($stmt) or die(mysqli_stmt_error($stmt));
 
