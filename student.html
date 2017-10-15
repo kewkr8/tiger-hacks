@@ -37,10 +37,31 @@
         }
     </style>
     <script>
+		$(function(){
+			$.post("studentTimes.php", {action:"set", student:$_GET("name")}, function(data){
+				
+			});
+		});
+
+		function $_GET(param) {
+		
+			var vars = {};
+			window.location.href.replace( location.hash, '' ).replace( 
+				/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+				function( m, key, value ) { // callback
+					vars[key] = value !== undefined ? value : '';
+				}
+			);
+
+			if ( param ) {
+				return vars[param] ? vars[param] : null;	
+			}
+
+			return vars;
+		}
+
         function quit() {
             window.location.replace("login.html");
-
-
         }
     </script>
 </head>
