@@ -46,7 +46,7 @@
     function getName($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
         if($stmt = mysqli_prepare($link, "SELECT name FROM Users WHERE id = ?") or die ("prepare error" . mysqli_error($link))){
-            mysqli_stmt_bind_param($stmt, "i", $student) or die ("bind param" . mysqli_stmt_error($stmt));
+            mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
 
             if(mysqli_stmt_execute($stmt) or die ("not executed")){
                 mysqli_stmt_store_result($stmt) or die (mysqli_stmt_error($stmt));
@@ -63,8 +63,9 @@
 		}
 
         mysqli_stmt_close($stmt);
-
     }
+
+	echo getName(3, $host, $user, $pass);
 
     function getTime($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
