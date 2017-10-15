@@ -9,25 +9,25 @@
 		return $link;
 	}
 	
-    function getId($studentName, $host, $user, $pass){
+	function getId($studentName, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
         if($stmt = mysqli_prepare($link, "SELECT id FROM Users WHERE name = ?") or die ("prepare error" . mysqli_error($link))){
-            mysqli_stmt_bind_param($stmt, "s", $student) or die ("bind param" . mysqli_stmt_error($stmt));
+            mysqli_stmt_bind_param($stmt, "s", $studentName) or die ("bind param" . mysqli_stmt_error($stmt));
 
             if(mysqli_stmt_execute($stmt) or die ("not executed")){
                 mysqli_stmt_store_result($stmt) or die (mysqli_stmt_error($stmt));
 
-                if(!mysqli_stmt_num_rows($stmt) == 0){
+				if(mysqli_stmt_num_rows($stmt) == 0){
                     return -1;
-                }else{
-					return mysqli_stmt_bind_result($stmt, $studentId);
+				}else{
+					mysqli_stmt_bind_result($stmt, $studentId);
+					mysqli_stmt_fetch($stmt);
+					return $studentId;
                 }		
             }
         }
         mysqli_close($link);
     }
-
-	echo getId("Teddy", $host, $user, $pass);
 
     function addUser($name, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
