@@ -25,6 +25,13 @@
             }
         }
     </style>
+    <script>
+        function quit() {
+            window.location.replace("login.html");
+
+
+        }
+    </script>
 </head>
 
 
@@ -41,7 +48,7 @@
             </div>
 
             <div class="col-sm-1">
-                <button class="btn btn-default" style="margin-top: 25px" type="button">
+                <button class="btn btn-default" style="margin-top: 25px" type="button" onclick="quit()">
                     <span class="glyphicon glyphicon-user"></span>
                 </button>
 
@@ -52,12 +59,11 @@
         <hr>
         <div class="row" style="padding: 25px">
             <div class="col-sm-4"></div>
-            <div class="col-sm-4" style="text-align: center; border: solid">
-                <h2>Clock</h2>
-                <div id="demo"></div>
-                
-                <button onclick="clearInterval(myVar)">Stop time</button>
-                <button onclick="resetTimer()">Reset time</button>
+            <div class="col-sm-4" style="text-align: center; border: outset; background-color: gray">
+
+                <h1 style="color: red"><time>00:00:00</time></h1>
+
+
             </div>
             <div class="col-sm-4">
             </div>
@@ -87,7 +93,7 @@
     </div>
 
 
-<script src="timer.js"></script>
+    <script src="timer.js"></script>
 </body>
 
 </html>
