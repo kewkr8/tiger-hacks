@@ -91,6 +91,25 @@
 
     function getActive($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
+        if($stmt = mysqli_prepare($link, "SELECT isActive FROM studentTimes WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
+            mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
+
+            if(mysqli_stmt_execute($stmt) or die ("not executed")){
+                mysqli_stmt_store_result($stmt) or die (mysqli_stmt_error($stmt));
+
+                if(mysqli_stmt_num_rows($stmt) == 0){
+                    return false;
+                }else{
+                    mysqli_stmt_bind_result($stmt, $isActive);
+                    mysqli_stmt_fetch($stmt);
+                    return $isActive;
+
+                }		
+            }
+        }
+
+
+
         mysqli_stmt_close($stmt);
 
     }
@@ -118,7 +137,7 @@
    
     function setTime($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
-        if($stmt = mysqli_prepare($link, "INSERT INTO studentTimes (studentId, sessionStart) VALUES (?, NOW())") or die ("prepare error" . mysqli_error($link))){
+        if($stmt = mysqli_prepare($link, "INSERT INTO studentTimes (studentId, sessionStart, isActive) VALUES (?, NOW(), true)") or die ("prepare error" . mysqli_error($link))){
             mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
             mysqli_stmt_execute($stmt) or die(mysqli_stmt_error($stmt));
 
