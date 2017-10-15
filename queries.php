@@ -65,11 +65,11 @@
         mysqli_stmt_close($stmt);
     }
 
-	echo getName(3, $host, $user, $pass);
+	echo getTime(3, $host, $user, $pass);
 
     function getTime($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
-        /*if($stmt = mysqli_prepare($link, "SELECT sessionStart FROM studentTimes WHERE id = ?") or die ("prepare error" . mysqli_error($link))){
+        if($stmt = mysqli_prepare($link, "SELECT sessionStart FROM studentTimes WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
             mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
 
             if(mysqli_stmt_execute($stmt) or die ("not executed")){
@@ -84,7 +84,7 @@
 
                 }		
             }
-        }*/
+        }
 
         mysqli_stmt_close($stmt);
     }
