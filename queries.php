@@ -31,16 +31,16 @@
 
     function addUser($name, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
-       /* if($stmtCreateStudent = mysqli_prepare($link, "INSERT INTO Users (name) VALUES (?)") or die ("prepare error" . mysqli_error($link))){
-            mysqli_stmt_bind_param($stmtCreateStudent, "s", $student) or die ("bind param" . mysqli_stmt_error($stmtCreateStudent));
-            mysqli_stmt_execute($stmtCreateStudent) or die(mysqli_stmt_error($stmtCreateStudent));
+        if($stmt = mysqli_prepare($link, "INSERT INTO Users (name) VALUES (?)") or die ("prepare error" . mysqli_error($link))){
+            mysqli_stmt_bind_param($stmt, "s", $name) or die ("bind param" . mysqli_stmt_error($stmt));
+            mysqli_stmt_execute($stmt) or die(mysqli_stmt_error($stmt));
 
             if(!mysqli_affected_rows($link)){								
-                echo json_encode(array("error" => "Could not create resources for " . $student));	
+                echo json_encode(array("error" => "Could not create resources for " . $name));	
             }
-        }*/
+        }
 
-        mysqli_stmt_close($stmtCreateStudent);
+        mysqli_stmt_close($stmt);
     }
     
     function getName($id, $host, $user, $pass){
