@@ -66,5 +66,5 @@
 			break;
 	}
 
-	mysqli_close($link);
+
 ?>
