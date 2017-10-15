@@ -28,7 +28,7 @@
 
 	$action = (empty($_POST["action"])) ? "" : mysqli_real_escape_string($link, htmlspecialchars($_POST["action"]));
 	$student = (empty($_POST["student"])) ? "" : mysqli_real_escape_string($link, htmlspecialchars($_POST["student"]));
-	$userId = getId($student, $host, $user, $pass));
+	$userId = getId($student, $host, $user, $pass);
 
 	switch ($action) {
 		case "set":
@@ -63,9 +63,7 @@
 
 			break;
 		case "fetch":
-			if(!$student){
-				break;
-			}
+			echo json_encode(getAllStudentTimes($host, $user, $pass));
 
 			break;
 		case "verify":
@@ -73,6 +71,8 @@
 				echo json_encode(array("error" => "Request missing student paramter to verify time for."));
 			    break;
 			}
+
+			setActive($userId, true, $host, $user, $pass);
 
 			break;
 		default:
