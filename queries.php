@@ -98,7 +98,7 @@
                 mysqli_stmt_store_result($stmt) or die (mysqli_stmt_error($stmt));
 
                 if(mysqli_stmt_num_rows($stmt) == 0){
-                    return false;
+                    return 0;
                 }else{
                     mysqli_stmt_bind_result($stmt, $isActive);
                     mysqli_stmt_fetch($stmt);
@@ -153,6 +153,15 @@
 
     function setActive($id, $active, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
+        if($stmt = mysqli_prepare($link, "UPDATE studentTimes SET isActve  = ? WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
+            mysqli_stmt_bind_param($stmt, "ii",$active, $id) or die ("bind param" . mysqli_stmt_error($stmt));
+            mysqli_stmt_execute($stmt) or die(mysqli_stmt_error($stmt));
+
+            if(!mysqli_affected_rows($link)){								
+                echo json_encode(array("error" => "Could not reset time"));	
+            }
+        }
+
         mysqli_stmt_close($stmt);
     }
 ?>
