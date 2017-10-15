@@ -29,13 +29,7 @@ function timer() {
 timer();
 
 
-/* Start button */
-start.onclick = timer;
 
-/* Stop button */
-stop.onclick = function() {
-    clearTimeout(t);
-}
 
 /* Clear button */
 clear.onclick = function() {
