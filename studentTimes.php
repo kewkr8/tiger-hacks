@@ -1,11 +1,33 @@
 <?php
 	require_once("timeClass.php");
+	require_once("../db.conf");
+
+	/* +--------------+------------+------+-----+-------------------+-----------------------------+
+	 * | Field        | Type       | Null | Key | Default           | Extra                       |
+	 * +--------------+------------+------+-----+-------------------+-----------------------------+
+	 * | id           | int(11)    | NO   | PRI | NULL              | auto_increment              |
+	 * | studentId    | int(11)    | YES  | UNI | NULL              |                             |
+	 * | sessionStart | timestamp  | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+	 * | isActive     | tinyint(1) | YES  |     | NULL              |                             |
+	 * +--------------+------------+------+-----+-------------------+-----------------------------+
+	 */
+
+	/* +----------+-------------+------+-----+---------+----------------+
+	 * | Field    | Type        | Null | Key | Default | Extra          |
+	 * +----------+-------------+------+-----+---------+----------------+
+	 * | id       | int(11)     | NO   | PRI | NULL    | auto_increment |
+	 * | name     | varchar(64) | NO   | UNI | NULL    |                |
+	 * | password | varchar(64) | YES  |     | NULL    |                |
+	 * +----------+-------------+------+-----+---------+----------------+
+	 */
+
+	$link = mysqli_connect($host, $user, $pass) or die("Connect Error " . mysql_error());
+	mysqli_select_db($link, "studentInfo") or die ("Database Error " . mysqli_error($link));
 
 	ini_set('session.gc_maxlifetime', 86400);
 
 	$action = (empty($_POST["action"])) ? "" : htmlspecialchars($_POST["action"]);
 	$student = (empty($_POST["student"])) ? "" : htmlspecialchars($_POST["student"]);
-	$_SESSION["studentList"] = (empty($_SESSION["studentList"])) ? array() : $_SESSION["studentList"];
 
 	switch ($action) {
 		case "set":
@@ -14,8 +36,9 @@
 				break;
 			}
 
-			$_SESSION["studentList"][$student] = new Time();
+			if($stmt = mysqli_prepare($link, "SELECT id FROM Users WHERE name = ?") or die ("prepare error" . mysqli_error($link))){
 
+			}
 			break;
 		case "reset":
 			if(!$student){
@@ -23,16 +46,11 @@
 				break;
 			}
 
-			$_SESSION["studentList"][$student] -> reset();
-			
 			break;
 		case "fetch":
 			if(!$student){
-				echo json_encode($_SESSION["studentList"]);
 				break;
 			}
-
-			echo json_encode($_SESSION["studentList"][$student]);
 
 			break;
 		case "verify":
@@ -41,15 +59,11 @@
 			    break;
 			}
 
-			$_SESSION["studentList"][$student]->isActive = true;
 			break;
 		default:
 			echo json_encode(array("error" => "Action not recognised"));
 			break;
 	}
 
-	$test = new Time();
-	if(!$student){
-		echo ($test -> time);
-	}
+	mysqli_close($link);
 ?>
