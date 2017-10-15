@@ -28,8 +28,7 @@
 
 	$action = (empty($_POST["action"])) ? "" : mysqli_real_escape_string($link, htmlspecialchars($_POST["action"]));
 	$student = (empty($_POST["student"])) ? "" : mysqli_real_escape_string($link, htmlspecialchars($_POST["student"]));
-
-	echo getName($student, $host, $user, $pass);
+	$userId = getId($student, $host, $user, $pass));
 
 	switch ($action) {
 		case "set":
@@ -38,8 +37,7 @@
 				break;
 			}
 
-			if(($userId = getId($student, $host, $user, $pass)) > 0){
-				echo $userId;
+			if($userId > 0){
 				resetTime($userId, $host, $user, $pass);
 				setActive($userId, true, $host, $user, $pass);
 			}else{
@@ -54,6 +52,14 @@
 				echo json_encode(array("error" => "Request missing student paramter to reset time for."));
 				break;
 			}
+
+			if($userId < 0){
+				echo json_encode(array("error" => "Could not find student to reset."));
+				break;
+			}
+
+			resetTime($userId, $host, $user, $pass);
+			setActive($userId, true, $host, $user, $pass);
 
 			break;
 		case "fetch":
