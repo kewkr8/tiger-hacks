@@ -17,7 +17,8 @@
 		}
 
 		public function reset(){
-			$time = date("h:i:sa");
+			$this->time = date("h:i:sa");
+			$this->isActive = true;
 		}
 	}
 
@@ -50,6 +51,12 @@
 
 			break;
 		case "verify":
+			if(!$student){
+				echo json_encode(array("error" => "Request missing student paramter to verify time for."));
+			    break;
+			}
+
+			$_SESSION["studentList"][$student]->isActive = true;
 			break;
 		default:
 			echo json_encode(array("error" => "Action not recognised"));
