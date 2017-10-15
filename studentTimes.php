@@ -1,26 +1,11 @@
 <?php
+	require_once("timeClass.php");
+
 	ini_set('session.gc_maxlifetime', 86400);
-	session_start();
 
 	$action = (empty($_POST["action"])) ? "" : htmlspecialchars($_POST["action"]);
 	$student = (empty($_POST["student"])) ? "" : htmlspecialchars($_POST["student"]);
 	$_SESSION["studentList"] = (empty($_SESSION["studentList"])) ? array() : $_SESSION["studentList"];
-
-	class Time{
-		public $time;
-		public $isActive;
-
-		public function __construct(){
-
-			$this->time = date("h:i:sa");
-			$this->isActive = true;	
-		}
-
-		public function reset(){
-			$this->time = date("h:i:sa");
-			$this->isActive = true;
-		}
-	}
 
 	switch ($action) {
 		case "set":
