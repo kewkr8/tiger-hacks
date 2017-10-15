@@ -116,6 +116,28 @@
 
     function getAllStudentTimes($host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
+        if($stmt = mysqli_prepare($link, "SELECT sessionStart, studentId FROM studentTimes") or die ("prepare error" . mysqli_error($link))){
+            mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
+
+            if(mysqli_stmt_execute($stmt) or die ("not executed")){
+                mysqli_stmt_store_result($stmt) or die (mysqli_stmt_error($stmt));
+
+                if(mysqli_stmt_num_rows($stmt) == 0){
+                    return '';
+                }else{
+                    mysqli_stmt_bind_result($stmt, $time, $studentId);
+                    $times = array();
+                    while(mysqli_stmt_fetch($stmt)){
+                        $times[getName($studentId, $host, $user, $pass)] = $time; 
+
+                    }
+                    
+                    return $times;
+
+                }		
+            }
+        }
+
         mysqli_stmt_close($stmt);
         
     }
