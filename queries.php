@@ -1,70 +1,97 @@
 <?php 
-    require_once("../db.conf");
 
-    function startdb(){
+	require_once("db.conf");
+
+	function getDBLink($host, $user, $pass){
         $link = mysqli_connect($host, $user, $pass) or die("Connect Error " . mysql_error());
-        mysqli_select_db($link, "studentInfo") or die ("Database Error " . mysqli_error($link));
-    
-        ini_set('session.gc_maxlifetime', 86400);
-    }
-    function getId($studentName){
+		mysqli_select_db($link, "studentInfo") or die ("Database Error " . mysqli_error($link));
+
+		return $link;
+	}
+	
+	function getId($studentName, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
         if($stmt = mysqli_prepare($link, "SELECT id FROM Users WHERE name = ?") or die ("prepare error" . mysqli_error($link))){
-            mysqli_stmt_bind_param($stmt, "s", $student) or die ("bind param" . mysqli_stmt_error($stmt));
+            mysqli_stmt_bind_param($stmt, "s", $studentName) or die ("bind param" . mysqli_stmt_error($stmt));
 
             if(mysqli_stmt_execute($stmt) or die ("not executed")){
                 mysqli_stmt_store_result($stmt) or die (mysqli_stmt_error($stmt));
 
-                if(!mysqli_stmt_num_rows($stmt) == 0){
+				if(mysqli_stmt_num_rows($stmt) == 0){
                     return -1;
-                }else{
-
-                return mysqli_stmt_bind_result($stmt, $studentId);
-
-
+				}else{
+					mysqli_stmt_bind_result($stmt, $studentId);
+					mysqli_stmt_fetch($stmt);
+					return $studentId;
                 }		
             }
         }
-
+        mysqli_close($link);
     }
 
-    function addUser($name){
-        if($stmtCreateStudent = mysqli_prepare($link, "INSERT INTO Users (name) VALUES (?)") or die ("prepare error" . mysqli_error($link))){
-            mysqli_stmt_bind_param($stmtCreateStudent, "s", $student) or die ("bind param" . mysqli_stmt_error($stmtCreateStudent));
-            mysqli_stmt_execute($stmtCreateStudent) or die(mysqli_stmt_error($stmtCreateStudent));
+    function addUser($name, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        if($stmt = mysqli_prepare($link, "INSERT INTO Users (name) VALUES (?)") or die ("prepare error" . mysqli_error($link))){
+            mysqli_stmt_bind_param($stmt, "s", $name) or die ("bind param" . mysqli_stmt_error($stmt));
+            mysqli_stmt_execute($stmt) or die(mysqli_stmt_error($stmt));
 
             if(!mysqli_affected_rows($link)){								
-                echo json_encode(array("error" => "Could not create resources for " . $student));	
+                echo json_encode(array("error" => "Could not create resources for " . $name));	
             }
         }
 
-        mysqli_stmt_close($stmtCreateStudent);
+        mysqli_stmt_close($stmt);
+    }
+    
+    function getName($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        if($stmt = mysqli_prepare($link, "SELECT name FROM Users WHERE id = ?") or die ("prepare error" . mysqli_error($link))){
+            mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
+
+            if(mysqli_stmt_execute($stmt) or die ("not executed")){
+                mysqli_stmt_store_result($stmt) or die (mysqli_stmt_error($stmt));
+
+                if(mysqli_stmt_num_rows($stmt) == 0){
+                    return '';
+                }else{
+                    mysqli_stmt_bind_result($stmt, $name);
+                    mysqli_stmt_fetch($stmt);
+                    return $name;
+
+                }		
+            }
+		}
+
+        mysqli_stmt_close($stmt);
+    }
+
+	echo getName(3, $host, $user, $pass);
+
+    function getTime($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
+    }
+
+    function getActive($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
 
     }
 
-    function getName($id){
-
-    }
-
-    function getTime($id){
-
-    }
-
-    function getActive($id){
-
-
-    }
-
-    function getAllStudentTimes(){
+    function getAllStudentTimes($host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
         
     }
 
-    function resetTime($id){
+    function resetTime($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
 
     }
    
-    function setActive($id, $active){
-
-
+    function setActive($id, $active, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
     }
-
 ?>
