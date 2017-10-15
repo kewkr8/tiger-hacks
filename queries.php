@@ -65,8 +65,6 @@
         mysqli_stmt_close($stmt);
     }
 
-	print_r(getAllStudentTimes($host, $user, $pass));
-
     function getTime($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
         if($stmt = mysqli_prepare($link, "SELECT sessionStart FROM studentTimes WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
@@ -108,10 +106,7 @@
             }
         }
 
-
-
-        mysqli_stmt_close($stmt);
-
+		mysqli_stmt_close($stmt);
     }
 
     function getAllStudentTimes($host, $user, $pass){
@@ -143,11 +138,11 @@
 
     function resetTime($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
-        if($stmt = mysqli_prepare($link, "UPDATE studentTimes SET sessionStart  = now() WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
+        if($stmt = mysqli_prepare($link, "UPDATE studentTimes SET sessionStart = now() WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
             mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
             mysqli_stmt_execute($stmt) or die(mysqli_stmt_error($stmt));
 
-            if(!mysqli_affected_rows($link)){								
+            if(!mysqli_affected_rows($link)){							
                 echo json_encode(array("error" => "Could not reset time"));	
             }
         }
@@ -177,10 +172,6 @@
         if($stmt = mysqli_prepare($link, "UPDATE studentTimes SET isActive  = ? WHERE studentId = ?") or die ("prepare error" . mysqli_error($link))){
             mysqli_stmt_bind_param($stmt, "ii",$active, $id) or die ("bind param" . mysqli_stmt_error($stmt));
             mysqli_stmt_execute($stmt) or die(mysqli_stmt_error($stmt));
-
-            if(!mysqli_affected_rows($link)){								
-                echo json_encode(array("error" => "Could not reset time"));	
-            }
         }
 
         mysqli_stmt_close($stmt);

@@ -1,6 +1,6 @@
 <?php
 	require_once("timeClass.php");
-	require_once("../db.conf");
+	require_once("queries.php");
 
 	/* +--------------+------------+------+-----+-------------------+-----------------------------+
 	 * | Field        | Type       | Null | Key | Default           | Extra                       |
@@ -29,6 +29,8 @@
 	$action = (empty($_POST["action"])) ? "" : mysqli_real_escape_string($link, htmlspecialchars($_POST["action"]));
 	$student = (empty($_POST["student"])) ? "" : mysqli_real_escape_string($link, htmlspecialchars($_POST["student"]));
 
+	echo getName($student, $host, $user, $pass);
+
 	switch ($action) {
 		case "set":
 			if(!$student){
@@ -36,9 +38,15 @@
 				break;
 			}
 
-
-
-			mysqli_stmt_close($stmt);
+			if(($userId = getId($student, $host, $user, $pass)) > 0){
+				echo $userId;
+				resetTime($userId, $host, $user, $pass);
+				setActive($userId, true, $host, $user, $pass);
+			}else{
+				addUser($student, $host, $user, $pass);
+				$newUserId = getId($student, $host, $user, $pass);
+				setTime($newUserId, $host, $user, $pass);
+			}
 
 			break;
 		case "reset":
