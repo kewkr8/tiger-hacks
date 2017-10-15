@@ -69,6 +69,23 @@
 
     function getTime($id, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
+        /*if($stmt = mysqli_prepare($link, "SELECT sessionStart FROM studentTimes WHERE id = ?") or die ("prepare error" . mysqli_error($link))){
+            mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
+
+            if(mysqli_stmt_execute($stmt) or die ("not executed")){
+                mysqli_stmt_store_result($stmt) or die (mysqli_stmt_error($stmt));
+
+                if(mysqli_stmt_num_rows($stmt) == 0){
+                    return '';
+                }else{
+                    mysqli_stmt_bind_result($stmt, $time);
+                    mysqli_stmt_fetch($stmt);
+                    return $time;
+
+                }		
+            }
+        }*/
+
         mysqli_stmt_close($stmt);
     }
 
@@ -90,6 +107,22 @@
 
     }
    
+    function setTime($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        if($stmt = mysqli_prepare($link, "INSERT INTO studentTimes (studentId, sessionStart) VALUES (?, NOW())") or die ("prepare error" . mysqli_error($link))){
+            mysqli_stmt_bind_param($stmt, "i", $id) or die ("bind param" . mysqli_stmt_error($stmt));
+            mysqli_stmt_execute($stmt) or die(mysqli_stmt_error($stmt));
+
+            if(!mysqli_affected_rows($link)){								
+                echo json_encode(array("error" => "Could not create resources for " . $name));	
+            }
+        }
+
+
+        mysqli_stmt_close($stmt);
+
+    }
+
     function setActive($id, $active, $host, $user, $pass){
         $link = getDBLink($host, $user, $pass);
         mysqli_stmt_close($stmt);
