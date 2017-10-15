@@ -1,13 +1,16 @@
 <?php 
-    require_once("../db.conf");
 
-    function startdb(){
+	require_once("db.conf");
+
+	function getDBLink($host, $user, $pass){
         $link = mysqli_connect($host, $user, $pass) or die("Connect Error " . mysql_error());
-        mysqli_select_db($link, "studentInfo") or die ("Database Error " . mysqli_error($link));
-    
-    }
-    function getId($studentName){
-        startdb();
+		mysqli_select_db($link, "studentInfo") or die ("Database Error " . mysqli_error($link));
+
+		return $link;
+	}
+	
+    function getId($studentName, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
         if($stmt = mysqli_prepare($link, "SELECT id FROM Users WHERE name = ?") or die ("prepare error" . mysqli_error($link))){
             mysqli_stmt_bind_param($stmt, "s", $student) or die ("bind param" . mysqli_stmt_error($stmt));
 
@@ -17,17 +20,17 @@
                 if(!mysqli_stmt_num_rows($stmt) == 0){
                     return -1;
                 }else{
-
-                return mysqli_stmt_bind_result($stmt, $studentId);
-
-
+					return mysqli_stmt_bind_result($stmt, $studentId);
                 }		
             }
         }
         mysqli_close($link);
     }
 
-    function addUser($name){
+	echo getId("Teddy", $host, $user, $pass);
+
+    function addUser($name, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
        /* if($stmtCreateStudent = mysqli_prepare($link, "INSERT INTO Users (name) VALUES (?)") or die ("prepare error" . mysqli_error($link))){
             mysqli_stmt_bind_param($stmtCreateStudent, "s", $student) or die ("bind param" . mysqli_stmt_error($stmtCreateStudent));
             mysqli_stmt_execute($stmtCreateStudent) or die(mysqli_stmt_error($stmtCreateStudent));
@@ -35,15 +38,14 @@
             if(!mysqli_affected_rows($link)){								
                 echo json_encode(array("error" => "Could not create resources for " . $student));	
             }
-        }
+        }*/
 
         mysqli_stmt_close($stmtCreateStudent);
-*/
     }
     
-    function getName($id){
-       /* startdb();
-        if($stmt = mysqli_prepare($link, "SELECT name FROM Users WHERE id = ?") or die ("prepare error" . mysqli_error($link))){
+    function getName($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        /*if($stmt = mysqli_prepare($link, "SELECT name FROM Users WHERE id = ?") or die ("prepare error" . mysqli_error($link))){
             mysqli_stmt_bind_param($stmt, "s", $student) or die ("bind param" . mysqli_stmt_error($stmt));
 
             if(mysqli_stmt_execute($stmt) or die ("not executed")){
@@ -58,32 +60,37 @@
 
                 }		
             }
-        }
+		}*/
 
-        mysqli_stmt_close($stmtCreateStudent);
-*/
-    }
-
-    function getTime($id){
+        mysqli_stmt_close($stmt);
 
     }
 
-    function getActive($id){
+    function getTime($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
+    }
 
+    function getActive($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
 
     }
 
-    function getAllStudentTimes(){
+    function getAllStudentTimes($host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
         
     }
 
-    function resetTime($id){
+    function resetTime($id, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
 
     }
    
-    function setActive($id, $active){
-
-
+    function setActive($id, $active, $host, $user, $pass){
+        $link = getDBLink($host, $user, $pass);
+        mysqli_stmt_close($stmt);
     }
-
 ?>
