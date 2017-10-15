@@ -91,7 +91,10 @@
             </div>
 
         </div>
-        <button id="invisible" style="display:none;" href="" download></button>
+        <form id="formBtn" method="get" action="">
+            <p id="downloadMessage" style="display: none">A file is ready to be downloaded from your instructor</p>
+            <button type="submit" id = "invisible" style="display:none; align:center">DOWNLOAD</button>
+        </form>
 
     </div>
 
@@ -103,10 +106,13 @@
         function checkFile(){
         $.post("getfile.php").done(function(data){
             if (data != null){
-                downloadLink = "/var/www/html/uploads/" + data;
+                var name=data.split("/");
+                var lastElement = name[5];
+                var filepath = "/uploads/" + lastElement;
             
-                $("#invisible").attr("href", downloadLink);
-                $("#invisible").css("display", block);
+                $("#formBtn").attr("action", filepath);
+                $("#invisible").css({"display": "block"});
+                $("#downloadMessage").css({"display":"block"});
             }
             
 
